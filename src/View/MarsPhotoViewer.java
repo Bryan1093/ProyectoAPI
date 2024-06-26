@@ -155,6 +155,12 @@ public class MarsPhotoViewer extends JFrame {
     }
 
     private void openImageInNewWindow(String imageUrl) {
+        try {
+            new URL(imageUrl); // verifica que la URL sea válida
+        } catch (MalformedURLException e) {
+            showErrorMessage("La URL de la imagen es inválida");
+            return;
+        }
         SwingUtilities.invokeLater(() -> {
             JFrame imageFrame = new JFrame("Image Viewer");
             imageFrame.setSize(800, 600);
@@ -181,8 +187,10 @@ public class MarsPhotoViewer extends JFrame {
                 protected void done() {
                     try {
                         ImageIcon icon = get();
-                        if (icon != null) {
-                            imageLabel.setIcon(icon);
+                        if (icon!= null) {
+                            imageLabel.setIcon(icon); // actualiza la imagen del label
+                            imageLabel.revalidate(); // fuerza a recalcular el tamaño del label
+                            imageLabel.repaint(); // fuerza a redibujar el label
                         } else {
                             imageLabel.setText("Error al cargar la imagen");
                         }
