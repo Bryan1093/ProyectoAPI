@@ -4,14 +4,14 @@ import Controller.NasaApiController;
 import Model.MarsPhoto;
 
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
+import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MarsPhotoViewer extends JFrame {
     private static final String[] ROVER_OPTIONS = {"Curiosity", "Opportunity", "Spirit"};
@@ -30,7 +30,7 @@ public class MarsPhotoViewer extends JFrame {
 
     public MarsPhotoViewer() {
         setTitle("Mars Photo Viewer");
-        setSize(1000, 800);
+        setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -110,101 +110,40 @@ public class MarsPhotoViewer extends JFrame {
     private void displayPhotos(List<MarsPhoto> photos) {
         photoPanel.removeAll();
 
-        // Crear un mapa para almacenar la información única de cada foto
-        Map<String, MarsPhoto> uniquePhotos = new HashMap<>();
-
-        // Iterar sobre todas las fotos
         for (MarsPhoto photo : photos) {
-            String key = photo.getEarthDate() + "-" + photo.getRoverName() + "-" + photo.getMaxSol() + "-" + photo.getCameraName();
-
-            // Si la foto no está en el mapa, agrégala al mapa y crea su panel correspondiente
-            if (!uniquePhotos.containsKey(key)) {
-                uniquePhotos.put(key, photo);
-            }
-        }
-
-        // Iterar sobre las fotos únicas y crear los paneles correspondientes
-        for (MarsPhoto uniquePhoto : uniquePhotos.values()) {
             JPanel singlePhotoPanel = new JPanel();
             singlePhotoPanel.setLayout(new BoxLayout(singlePhotoPanel, BoxLayout.Y_AXIS));
 
-            JLabel dateLabel = new JLabel("Date: " + uniquePhoto.getEarthDate().toString());
-            JLabel cameraLabel = new JLabel("Camera: " + uniquePhoto.getCameraName() + " (" + uniquePhoto.getCameraFullName() + ")");
-            JLabel roverLabel = new JLabel("Rover: " + uniquePhoto.getRoverName() + " - Sol " + uniquePhoto.getMaxSol());
-            JLabel linkLabel = new JLabel("<html><a href='" + uniquePhoto.getImgSrc() + "'>" + uniquePhoto.getImgSrc() + "</a></html>");
-            JLabel imageLabel = new JLabel();
+            JLabel dateLabel = new JLabel("Date: " + photo.getEarthDate().toString());
+            JLabel cameraLabel = new JLabel("Camera: " + photo.getCameraName() + " (" + photo.getCameraFullName() + ")");
+            JLabel roverLabel = new JLabel("Rover: " + photo.getRoverName() + " - Sol " + photo.getMaxSol());
+
+            JEditorPane linkPane = new JEditorPane("text/html", "<a href='" + photo.getImgSrc() + "'>" + photo.getImgSrc() + "</a>");
+            linkPane.setEditable(false);
+            linkPane.setOpaque(false);
+            linkPane.addHyperlinkListener(new HyperlinkListener() {
+                @Override
+                public void hyperlinkUpdate(HyperlinkEvent e) {
+                    if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                        try {
+                            Desktop.getDesktop().browse(e.getURL().toURI());
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+                }
+            });
 
             singlePhotoPanel.add(dateLabel);
             singlePhotoPanel.add(cameraLabel);
             singlePhotoPanel.add(roverLabel);
-            singlePhotoPanel.add(linkLabel);
-            singlePhotoPanel.add(imageLabel);
-
-            // Agregar acción al enlace para abrir la imagen en una nueva ventana
-            linkLabel.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
-                    openImageInNewWindow(uniquePhoto.getImgSrc());
-                }
-            });
+            singlePhotoPanel.add(linkPane);
 
             photoPanel.add(singlePhotoPanel);
         }
 
         photoPanel.revalidate();
         photoPanel.repaint();
-    }
-
-    private void openImageInNewWindow(String imageUrl) {
-        try {
-            new URL(imageUrl); // verifica que la URL sea válida
-        } catch (MalformedURLException e) {
-            showErrorMessage("La URL de la imagen es inválida");
-            return;
-        }
-        SwingUtilities.invokeLater(() -> {
-            JFrame imageFrame = new JFrame("Image Viewer");
-            imageFrame.setSize(800, 600);
-            imageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-            JLabel imageLabel = new JLabel();
-            imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-
-            SwingWorker<ImageIcon, Void> worker = new SwingWorker<>() {
-                @Override
-                protected ImageIcon doInBackground() throws Exception {
-                    try {
-                        return new ImageIcon(new URL(imageUrl));
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                        return null;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        ImageIcon icon = get();
-                        if (icon!= null) {
-                            imageLabel.setIcon(icon); // actualiza la imagen del label
-                            imageLabel.revalidate(); // fuerza a recalcular el tamaño del label
-                            imageLabel.repaint(); // fuerza a redibujar el label
-                        } else {
-                            imageLabel.setText("Error al cargar la imagen");
-                        }
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        imageLabel.setText("Error al cargar la imagen");
-                    }
-                }
-            };
-            worker.execute();
-
-            imageFrame.add(new JScrollPane(imageLabel), BorderLayout.CENTER);
-            imageFrame.setVisible(true);
-        });
     }
 
     private void showErrorMessage(String message) {
