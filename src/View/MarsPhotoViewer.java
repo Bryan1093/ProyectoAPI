@@ -113,14 +113,20 @@ public class MarsPhotoViewer extends JFrame {
         for (MarsPhoto photo : photos) {
             JPanel singlePhotoPanel = new JPanel();
             singlePhotoPanel.setLayout(new BoxLayout(singlePhotoPanel, BoxLayout.Y_AXIS));
+            singlePhotoPanel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align components to the left
 
             JLabel dateLabel = new JLabel("Date: " + photo.getEarthDate().toString());
             JLabel cameraLabel = new JLabel("Camera: " + photo.getCameraName() + " (" + photo.getCameraFullName() + ")");
             JLabel roverLabel = new JLabel("Rover: " + photo.getRoverName() + " - Sol " + photo.getMaxSol());
 
+            dateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            cameraLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            roverLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
             JEditorPane linkPane = new JEditorPane("text/html", "<a href='" + photo.getImgSrc() + "'>" + photo.getImgSrc() + "</a>");
             linkPane.setEditable(false);
             linkPane.setOpaque(false);
+            linkPane.setAlignmentX(Component.LEFT_ALIGNMENT);
             linkPane.addHyperlinkListener(new HyperlinkListener() {
                 @Override
                 public void hyperlinkUpdate(HyperlinkEvent e) {
