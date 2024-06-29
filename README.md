@@ -41,9 +41,9 @@ Link: https://uceedu-my.sharepoint.com/:f:/g/personal/beloya_uce_edu_ec/EvGUtdLF
 
 ***Configuración de la Música:***
 
-Coloca tus archivos de música en una carpeta accesible desde el proyecto.
+- Coloca tus archivos de música en una carpeta accesible desde el proyecto.
 
-Actualiza la lista de reproducción en la clase MusicPlayer.java con las rutas absolutas de tus archivos de música.}
+- Actualiza la lista de reproducción en la clase MusicPlayer.java con las rutas absolutas de tus archivos de música.
 
 List<String> playlist = Arrays.asList(
 
