@@ -5,6 +5,8 @@
       <root url="jar://$USER_HOME$/Downloads/jar_files/json-20180813.jar!/" />
       <root url="jar://$USER_HOME$/Downloads/jar_files/rest-1.1-tests.jar!/" />
       <root url="jar://$USER_HOME$/Downloads/jar_files/rest-1.1.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/jlayer-1.0.1.4.jar!/" />
+      <root url="jar://$USER_HOME$/Documents/junit-3.8.2.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

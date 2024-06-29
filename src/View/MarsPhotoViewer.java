@@ -2,6 +2,8 @@ package View;
 
 import Controller.NasaApiController;
 import Model.MarsPhoto;
+import Model.MusicPlayer;
+
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
@@ -21,9 +23,11 @@ public class MarsPhotoViewer extends JFrame {
     private JTextField startDateField;
     private JTextField endDateField;
     private JButton fetchButton;
+    private JButton playMusicButton;
     private JPanel photoPanel;
     private JLabel statusLabel;
     private JDialog loadingDialog;
+    private MusicPlayer musicPlayer;
 
     private NasaApiController apiController;
 
@@ -44,6 +48,7 @@ public class MarsPhotoViewer extends JFrame {
         endDateField = new JTextField(10);
         endDateField.setText("YYYY-MM-DD");
         fetchButton = new JButton("Fetch Photos");
+        playMusicButton = new JButton("Play Music");
 
         controlPanel.add(new JLabel("Rover:"));
         controlPanel.add(roverComboBox);
@@ -56,6 +61,7 @@ public class MarsPhotoViewer extends JFrame {
         controlPanel.add(new JLabel("End Date:"));
         controlPanel.add(endDateField);
         controlPanel.add(fetchButton);
+        controlPanel.add(playMusicButton);
 
         add(controlPanel, BorderLayout.NORTH);
 
@@ -68,17 +74,21 @@ public class MarsPhotoViewer extends JFrame {
 
         fetchButton.addActionListener(e -> fetchPhotos());
 
+        playMusicButton.addActionListener(e -> playMusic());
+
         apiController = new NasaApiController();
 
         // Initialize loading dialog
         loadingDialog = new JDialog(this, "Loading", Dialog.ModalityType.APPLICATION_MODAL);
         JPanel loadingPanel = new JPanel(new BorderLayout());
         JLabel loadingLabel = new JLabel("Cargando...", JLabel.CENTER);
-        loadingLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        loadingLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Adjust font size
         loadingPanel.add(loadingLabel, BorderLayout.CENTER);
         loadingDialog.getContentPane().add(loadingPanel);
         loadingDialog.setSize(300, 200);
         loadingDialog.setLocationRelativeTo(this);
+
+        musicPlayer = new MusicPlayer();
     }
 
     private void setLoading(boolean isLoading) {
@@ -92,7 +102,7 @@ public class MarsPhotoViewer extends JFrame {
     }
 
     private void fetchPhotos() {
-        setLoading(true);
+        setLoading(true); // Mostrar mensaje de "Cargando..."
 
         new Thread(() -> {
             try {
@@ -119,13 +129,13 @@ public class MarsPhotoViewer extends JFrame {
                         displayPhotos(photos);
                         statusLabel.setText("Fotos cargadas correctamente.");
                     }
-                    setLoading(false);
+                    setLoading(false); // Ocultar mensaje de "Cargando..."
                 });
             } catch (Exception ex) {
                 ex.printStackTrace();
                 SwingUtilities.invokeLater(() -> {
                     showErrorMessage("Error al obtener las fotos: " + ex.getMessage());
-                    setLoading(false);
+                    setLoading(false); // Ocultar mensaje de "Cargando..."
                 });
             }
         }).start();
@@ -146,7 +156,7 @@ public class MarsPhotoViewer extends JFrame {
         for (MarsPhoto photo : photos) {
             JPanel singlePhotoPanel = new JPanel();
             singlePhotoPanel.setLayout(new BoxLayout(singlePhotoPanel, BoxLayout.Y_AXIS));
-            singlePhotoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            singlePhotoPanel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align components to the left
 
             JLabel dateLabel = new JLabel("Date: " + photo.getEarthDate().toString());
             JLabel cameraLabel = new JLabel("Camera: " + photo.getCameraName() + " (" + photo.getCameraFullName() + ")");
@@ -221,6 +231,12 @@ public class MarsPhotoViewer extends JFrame {
     private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
         statusLabel.setText(message);
+    }
+
+    private void playMusic() {
+        // Ruta local del archivo MP3
+        String musicFilePath = "C:\\Users\\bryan\\IdeaProjects\\Proyecto_API\\src\\res\\02. The Black.mp3";
+        musicPlayer.play(musicFilePath);
     }
 
     public static void main(String[] args) {
