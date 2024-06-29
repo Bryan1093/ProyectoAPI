@@ -1,149 +1,95 @@
 package Model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class MarsPhoto {
     private int id;
-    private int roverId;
-    private String roverName;
-    private String landingDate;
-    private String launchDate;
-    private String roverStatus;
-    private int maxSol;
-    private String maxDate;
-    private int totalPhotos;
-    private int cameraId;
+    private int sol;
     private String cameraName;
     private String cameraFullName;
     private String imgSrc;
     private LocalDate earthDate;
+    private String roverName;
+    private String roverStatus;
+    private LocalDate roverLandingDate;
+    private LocalDate roverLaunchDate;
+    private int roverMaxSol;
+    private LocalDate roverMaxDate;
+    private int roverTotalPhotos;
+    private List<String> roverCameras;
 
-    public MarsPhoto(int id, int roverId, String roverName, String landingDate, String launchDate, String roverStatus, int maxSol, String maxDate, int totalPhotos, int cameraId, String cameraName, String cameraFullName, String imgSrc, LocalDate earthDate) {
+    public MarsPhoto(int id, int sol, String cameraName, String cameraFullName, String imgSrc, LocalDate earthDate, String roverName, String roverStatus, LocalDate roverLandingDate, LocalDate roverLaunchDate, int roverMaxSol, LocalDate roverMaxDate, int roverTotalPhotos, List<String> roverCameras) {
         this.id = id;
-        this.roverId = roverId;
-        this.roverName = roverName;
-        this.landingDate = landingDate;
-        this.launchDate = launchDate;
-        this.roverStatus = roverStatus;
-        this.maxSol = maxSol;
-        this.maxDate = maxDate;
-        this.totalPhotos = totalPhotos;
-        this.cameraId = cameraId;
+        this.sol = sol;
         this.cameraName = cameraName;
         this.cameraFullName = cameraFullName;
         this.imgSrc = imgSrc;
         this.earthDate = earthDate;
+        this.roverName = roverName;
+        this.roverStatus = roverStatus;
+        this.roverLandingDate = roverLandingDate;
+        this.roverLaunchDate = roverLaunchDate;
+        this.roverMaxSol = roverMaxSol;
+        this.roverMaxDate = roverMaxDate;
+        this.roverTotalPhotos = roverTotalPhotos;
+        this.roverCameras = roverCameras;
     }
 
+    // Getters
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getRoverId() {
-        return roverId;
-    }
-
-    public void setRoverId(int roverId) {
-        this.roverId = roverId;
-    }
-
-    public String getRoverName() {
-        return roverName;
-    }
-
-    public void setRoverName(String roverName) {
-        this.roverName = roverName;
-    }
-
-    public String getLandingDate() {
-        return landingDate;
-    }
-
-    public void setLandingDate(String landingDate) {
-        this.landingDate = landingDate;
-    }
-
-    public String getLaunchDate() {
-        return launchDate;
-    }
-
-    public void setLaunchDate(String launchDate) {
-        this.launchDate = launchDate;
-    }
-
-    public String getRoverStatus() {
-        return roverStatus;
-    }
-
-    public void setRoverStatus(String roverStatus) {
-        this.roverStatus = roverStatus;
-    }
-
-    public int getMaxSol() {
-        return maxSol;
-    }
-
-    public void setMaxSol(int maxSol) {
-        this.maxSol = maxSol;
-    }
-
-    public String getMaxDate() {
-        return maxDate;
-    }
-
-    public void setMaxDate(String maxDate) {
-        this.maxDate = maxDate;
-    }
-
-    public int getTotalPhotos() {
-        return totalPhotos;
-    }
-
-    public void setTotalPhotos(int totalPhotos) {
-        this.totalPhotos = totalPhotos;
-    }
-
-    public int getCameraId() {
-        return cameraId;
-    }
-
-    public void setCameraId(int cameraId) {
-        this.cameraId = cameraId;
+    public int getSol() {
+        return sol;
     }
 
     public String getCameraName() {
         return cameraName;
     }
 
-    public void setCameraName(String cameraName) {
-        this.cameraName = cameraName;
-    }
-
     public String getCameraFullName() {
         return cameraFullName;
-    }
-
-    public void setCameraFullName(String cameraFullName) {
-        this.cameraFullName = cameraFullName;
     }
 
     public String getImgSrc() {
         return imgSrc;
     }
 
-    public void setImgSrc(String imgSrc) {
-        this.imgSrc = imgSrc;
-    }
-
     public LocalDate getEarthDate() {
         return earthDate;
     }
 
-    public void setEarthDate(LocalDate earthDate) {
-        this.earthDate = earthDate;
+    public String getRoverName() {
+        return roverName;
+    }
+
+    public String getRoverStatus() {
+        return roverStatus;
+    }
+
+    public LocalDate getRoverLandingDate() {
+        return roverLandingDate;
+    }
+
+    public LocalDate getRoverLaunchDate() {
+        return roverLaunchDate;
+    }
+
+    public int getRoverMaxSol() {
+        return roverMaxSol;
+    }
+
+    public LocalDate getRoverMaxDate() {
+        return roverMaxDate;
+    }
+
+    public int getRoverTotalPhotos() {
+        return roverTotalPhotos;
+    }
+
+    public List<String> getRoverCameras() {
+        return roverCameras;
     }
 }

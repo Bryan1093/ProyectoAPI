@@ -7,8 +7,6 @@ import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import java.awt.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -30,7 +28,7 @@ public class MarsPhotoViewer extends JFrame {
 
     public MarsPhotoViewer() {
         setTitle("Mars Photo Viewer");
-        setSize(800, 600);
+        setSize(1000, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -117,7 +115,7 @@ public class MarsPhotoViewer extends JFrame {
 
             JLabel dateLabel = new JLabel("Date: " + photo.getEarthDate().toString());
             JLabel cameraLabel = new JLabel("Camera: " + photo.getCameraName() + " (" + photo.getCameraFullName() + ")");
-            JLabel roverLabel = new JLabel("Rover: " + photo.getRoverName() + " - Sol " + photo.getMaxSol());
+            JLabel roverLabel = new JLabel("Rover: " + photo.getRoverName() + " - Sol " + photo.getRoverMaxSol());
 
             dateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             cameraLabel.setAlignmentX(Component.LEFT_ALIGNMENT);

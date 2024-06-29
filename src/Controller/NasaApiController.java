@@ -24,7 +24,7 @@ public class NasaApiController {
 
         while (hasMorePhotos) {
             String urlString = BASE_URL + rover + "/photos?sol=" + sol + "&camera=" + camera +
-                    "&earth_date=" + startDate + "," + endDate + "&page=" + page + "&api_key=" + API_KEY;
+                    "&earth_date=" + startDate + "&end_date=" + endDate + "&page=" + page + "&api_key=" + API_KEY;
             URL url = new URL(urlString);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -56,21 +56,28 @@ public class NasaApiController {
             JSONObject cameraJson = photoJson.getJSONObject("camera");
             JSONObject roverJson = photoJson.getJSONObject("rover");
 
+            // Extract the list of cameras
+            JSONArray camerasArray = roverJson.getJSONArray("cameras");
+            List<String> camerasList = new ArrayList<>();
+            for (int j = 0; j < camerasArray.length(); j++) {
+                camerasList.add(camerasArray.getJSONObject(j).getString("full_name"));
+            }
+
             photos.add(new MarsPhoto(
                     photoJson.getInt("id"),
-                    roverJson.getInt("id"),
-                    roverJson.getString("name"),
-                    roverJson.getString("landing_date"),
-                    roverJson.getString("launch_date"),
-                    roverJson.getString("status"),
-                    roverJson.getInt("max_sol"),
-                    roverJson.getString("max_date"),
-                    roverJson.getInt("total_photos"),
-                    cameraJson.getInt("id"),
+                    photoJson.getInt("sol"),
                     cameraJson.getString("name"),
                     cameraJson.getString("full_name"),
                     photoJson.getString("img_src"),
-                    LocalDate.parse(photoJson.getString("earth_date"))
+                    LocalDate.parse(photoJson.getString("earth_date")),
+                    roverJson.getString("name"),
+                    roverJson.getString("status"),
+                    LocalDate.parse(roverJson.getString("landing_date")),
+                    LocalDate.parse(roverJson.getString("launch_date")),
+                    roverJson.getInt("max_sol"),
+                    LocalDate.parse(roverJson.getString("max_date")),
+                    roverJson.getInt("total_photos"),
+                    camerasList
             ));
         }
 
