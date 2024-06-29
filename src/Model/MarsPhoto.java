@@ -88,8 +88,4 @@ public class MarsPhoto {
     public int getRoverTotalPhotos() {
         return roverTotalPhotos;
     }
-
-    public List<String> getRoverCameras() {
-        return roverCameras;
-    }
 }

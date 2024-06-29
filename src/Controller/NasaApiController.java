@@ -38,7 +38,7 @@ public class NasaApiController {
             JSONArray jsonArray = json.getJSONArray("photos");
 
             if (jsonArray.length() == 0) {
-                hasMorePhotos = false; // No more photos on the next page
+                hasMorePhotos = false;
             } else {
                 allPhotos.addAll(parsePhotos(jsonArray));
                 page++;
@@ -56,7 +56,6 @@ public class NasaApiController {
             JSONObject cameraJson = photoJson.getJSONObject("camera");
             JSONObject roverJson = photoJson.getJSONObject("rover");
 
-            // Extract the list of cameras
             JSONArray camerasArray = roverJson.getJSONArray("cameras");
             List<String> camerasList = new ArrayList<>();
             for (int j = 0; j < camerasArray.length(); j++) {

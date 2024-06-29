@@ -59,7 +59,7 @@ public class MarsPhotoViewer extends JFrame {
         add(controlPanel, BorderLayout.NORTH);
 
         photoPanel = new JPanel();
-        photoPanel.setLayout(new BoxLayout(photoPanel, BoxLayout.Y_AXIS)); // Use BoxLayout for vertical alignment
+        photoPanel.setLayout(new BoxLayout(photoPanel, BoxLayout.Y_AXIS));
         add(new JScrollPane(photoPanel), BorderLayout.CENTER);
 
         statusLabel = new JLabel();
@@ -68,6 +68,7 @@ public class MarsPhotoViewer extends JFrame {
         fetchButton.addActionListener(e -> fetchPhotos());
 
         apiController = new NasaApiController();
+
     }
 
     private void fetchPhotos() {
@@ -111,7 +112,7 @@ public class MarsPhotoViewer extends JFrame {
         for (MarsPhoto photo : photos) {
             JPanel singlePhotoPanel = new JPanel();
             singlePhotoPanel.setLayout(new BoxLayout(singlePhotoPanel, BoxLayout.Y_AXIS));
-            singlePhotoPanel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align components to the left
+            singlePhotoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
             JLabel dateLabel = new JLabel("Date: " + photo.getEarthDate().toString());
             JLabel cameraLabel = new JLabel("Camera: " + photo.getCameraName() + " (" + photo.getCameraFullName() + ")");
@@ -121,7 +122,44 @@ public class MarsPhotoViewer extends JFrame {
             cameraLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
             roverLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+            JLabel idLabel = new JLabel("ID: " + photo.getId());
+            JLabel solLabel = new JLabel("Sol: " + photo.getSol());
+            JLabel imgUrlLabel = new JLabel("Image URL: " + photo.getImgSrc());
+
+            idLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            solLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            imgUrlLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            JLabel roverStatusLabel = new JLabel("Rover Status: " + photo.getRoverStatus());
+            JLabel roverLaunchDateLabel = new JLabel("Launch Date: " + photo.getRoverLaunchDate());
+            JLabel roverLandingDateLabel = new JLabel("Landing Date: " + photo.getRoverLandingDate());
+            JLabel maxSolLabel = new JLabel("Max Sol: " + photo.getRoverMaxSol());
+            JLabel maxDateLabel = new JLabel("Max Date: " + photo.getRoverMaxDate());
+            JLabel totalPhotosLabel = new JLabel("Total Photos: " + photo.getRoverTotalPhotos());
+
+            roverStatusLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            roverLaunchDateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            roverLandingDateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            maxSolLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            maxDateLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+            totalPhotosLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+            singlePhotoPanel.add(dateLabel);
+            singlePhotoPanel.add(cameraLabel);
+            singlePhotoPanel.add(roverLabel);
+            singlePhotoPanel.add(idLabel);
+            singlePhotoPanel.add(solLabel);
+            singlePhotoPanel.add(imgUrlLabel);
+            singlePhotoPanel.add(roverStatusLabel);
+            singlePhotoPanel.add(roverLaunchDateLabel);
+            singlePhotoPanel.add(roverLandingDateLabel);
+            singlePhotoPanel.add(maxSolLabel);
+            singlePhotoPanel.add(maxDateLabel);
+            singlePhotoPanel.add(totalPhotosLabel);
+
+            // Adding the link to the image
             JEditorPane linkPane = new JEditorPane("text/html", "<a href='" + photo.getImgSrc() + "'>" + photo.getImgSrc() + "</a>");
+            System.out.println(" ");
             linkPane.setEditable(false);
             linkPane.setOpaque(false);
             linkPane.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -138,9 +176,6 @@ public class MarsPhotoViewer extends JFrame {
                 }
             });
 
-            singlePhotoPanel.add(dateLabel);
-            singlePhotoPanel.add(cameraLabel);
-            singlePhotoPanel.add(roverLabel);
             singlePhotoPanel.add(linkPane);
 
             photoPanel.add(singlePhotoPanel);
@@ -149,6 +184,7 @@ public class MarsPhotoViewer extends JFrame {
         photoPanel.revalidate();
         photoPanel.repaint();
     }
+
 
     private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
