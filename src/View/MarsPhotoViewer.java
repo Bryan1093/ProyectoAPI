@@ -11,6 +11,7 @@ import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 import java.util.List;
 
 public class MarsPhotoViewer extends JFrame {
@@ -82,7 +83,7 @@ public class MarsPhotoViewer extends JFrame {
         loadingDialog = new JDialog(this, "Loading", Dialog.ModalityType.APPLICATION_MODAL);
         JPanel loadingPanel = new JPanel(new BorderLayout());
         JLabel loadingLabel = new JLabel("Cargando...", JLabel.CENTER);
-        loadingLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Adjust font size
+        loadingLabel.setFont(new Font("Arial", Font.BOLD, 24));
         loadingPanel.add(loadingLabel, BorderLayout.CENTER);
         loadingDialog.getContentPane().add(loadingPanel);
         loadingDialog.setSize(300, 200);
@@ -102,7 +103,7 @@ public class MarsPhotoViewer extends JFrame {
     }
 
     private void fetchPhotos() {
-        setLoading(true); // Mostrar mensaje de "Cargando..."
+        setLoading(true);
 
         new Thread(() -> {
             try {
@@ -129,13 +130,13 @@ public class MarsPhotoViewer extends JFrame {
                         displayPhotos(photos);
                         statusLabel.setText("Fotos cargadas correctamente.");
                     }
-                    setLoading(false); // Ocultar mensaje de "Cargando..."
+                    setLoading(false);
                 });
             } catch (Exception ex) {
                 ex.printStackTrace();
                 SwingUtilities.invokeLater(() -> {
                     showErrorMessage("Error al obtener las fotos: " + ex.getMessage());
-                    setLoading(false); // Ocultar mensaje de "Cargando..."
+                    setLoading(false);
                 });
             }
         }).start();
@@ -156,7 +157,7 @@ public class MarsPhotoViewer extends JFrame {
         for (MarsPhoto photo : photos) {
             JPanel singlePhotoPanel = new JPanel();
             singlePhotoPanel.setLayout(new BoxLayout(singlePhotoPanel, BoxLayout.Y_AXIS));
-            singlePhotoPanel.setAlignmentX(Component.LEFT_ALIGNMENT); // Align components to the left
+            singlePhotoPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
             JLabel dateLabel = new JLabel("Date: " + photo.getEarthDate().toString());
             JLabel cameraLabel = new JLabel("Camera: " + photo.getCameraName() + " (" + photo.getCameraFullName() + ")");
@@ -201,7 +202,6 @@ public class MarsPhotoViewer extends JFrame {
             singlePhotoPanel.add(maxDateLabel);
             singlePhotoPanel.add(totalPhotosLabel);
 
-            // Adding the link to the image
             JEditorPane linkPane = new JEditorPane("text/html", "<a href='" + photo.getImgSrc() + "'>" + photo.getImgSrc() + "</a>");
             linkPane.setEditable(false);
             linkPane.setOpaque(false);
@@ -234,9 +234,12 @@ public class MarsPhotoViewer extends JFrame {
     }
 
     private void playMusic() {
-        // Ruta local del archivo MP3
-        String musicFilePath = "C:\\Users\\bryan\\IdeaProjects\\Proyecto_API\\src\\res\\02. The Black.mp3";
-        musicPlayer.play(musicFilePath);
+        List<String> playlist = Arrays.asList(
+                "C:\\Users\\bryan\\IdeaProjects\\Proyecto_API\\src\\res\\02. The Black.mp3",
+                "C:\\Users\\bryan\\IdeaProjects\\Proyecto_API\\src\\res\\09. Here I Am.mp3"
+        );
+        musicPlayer.setPlaylist(playlist);
+        musicPlayer.play();
     }
 
     public static void main(String[] args) {
