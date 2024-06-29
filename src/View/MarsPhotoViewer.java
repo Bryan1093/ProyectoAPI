@@ -6,11 +6,9 @@ import Model.MusicPlayer;
 
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 import java.util.List;
 
 public class MarsPhotoViewer extends JFrame {
@@ -78,7 +76,6 @@ public class MarsPhotoViewer extends JFrame {
 
         apiController = new NasaApiController();
 
-        // Initialize loading dialog
         loadingDialog = new JDialog(this, "Loading", Dialog.ModalityType.APPLICATION_MODAL);
         JPanel loadingPanel = new JPanel(new BorderLayout());
         JLabel loadingLabel = new JLabel("Cargando...", JLabel.CENTER);

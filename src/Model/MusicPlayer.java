@@ -15,13 +15,12 @@ public class MusicPlayer {
 
     public MusicPlayer() {
         this.playlist = new ArrayList<>();
-        initializePlaylist();  // Aquí se inicializa la lista de reproducción
+        initializePlaylist();
     }
 
     private void initializePlaylist() {
         playlist.add("C:\\Users\\bryan\\IdeaProjects\\Proyecto_API\\src\\res\\02. The Black.mp3");
         playlist.add("C:\\Users\\bryan\\IdeaProjects\\Proyecto_API\\src\\res\\09. Here I Am.mp3");
-        // Agrega más canciones si es necesario
     }
 
     public void play() {
@@ -50,14 +49,5 @@ public class MusicPlayer {
         });
 
         playerThread.start();
-    }
-
-    public void stop() {
-        if (player != null) {
-            player.close();
-        }
-        if (playerThread != null) {
-            playerThread.interrupt();
-        }
     }
 }
