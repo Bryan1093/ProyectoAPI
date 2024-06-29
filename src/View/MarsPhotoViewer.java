@@ -23,6 +23,7 @@ public class MarsPhotoViewer extends JFrame {
     private JButton fetchButton;
     private JPanel photoPanel;
     private JLabel statusLabel;
+    private JDialog loadingDialog;
 
     private NasaApiController apiController;
 
@@ -69,39 +70,72 @@ public class MarsPhotoViewer extends JFrame {
 
         apiController = new NasaApiController();
 
+        // Initialize loading dialog
+        loadingDialog = new JDialog(this, "Loading", Dialog.ModalityType.APPLICATION_MODAL);
+        JPanel loadingPanel = new JPanel(new BorderLayout());
+        JLabel loadingLabel = new JLabel("Cargando...", JLabel.CENTER);
+        loadingLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        loadingPanel.add(loadingLabel, BorderLayout.CENTER);
+        loadingDialog.getContentPane().add(loadingPanel);
+        loadingDialog.setSize(300, 200);
+        loadingDialog.setLocationRelativeTo(this);
+    }
+
+    private void setLoading(boolean isLoading) {
+        SwingUtilities.invokeLater(() -> {
+            if (isLoading) {
+                loadingDialog.setVisible(true);
+            } else {
+                loadingDialog.setVisible(false);
+            }
+        });
     }
 
     private void fetchPhotos() {
-        try {
-            String rover = (String) roverComboBox.getSelectedItem();
-            String camera = (String) cameraComboBox.getSelectedItem();
-            String solText = solTextField.getText();
-            String startDateText = startDateField.getText();
-            String endDateText = endDateField.getText();
+        setLoading(true);
 
-            if (solText.isEmpty() || startDateText.isEmpty() || endDateText.isEmpty()) {
-                showErrorMessage("Por favor ingrese todos los datos requeridos.");
-                return;
+        new Thread(() -> {
+            try {
+                String rover = (String) roverComboBox.getSelectedItem();
+                String camera = (String) cameraComboBox.getSelectedItem();
+                String solText = solTextField.getText();
+                String startDateText = startDateField.getText();
+                String endDateText = endDateField.getText();
+
+                if (solText.isEmpty() || startDateText.isEmpty() || endDateText.isEmpty()) {
+                    showErrorMessage("Por favor ingrese todos los datos requeridos.");
+                    return;
+                }
+
+                int sol = Integer.parseInt(solText);
+                LocalDate startDate = parseDate(startDateText);
+                LocalDate endDate = parseDate(endDateText);
+
+                List<MarsPhoto> photos = apiController.getPhotos(rover, sol, camera, startDate, endDate);
+                SwingUtilities.invokeLater(() -> {
+                    if (photos.isEmpty()) {
+                        showErrorMessage("No se encontraron fotos para los filtros seleccionados.");
+                    } else {
+                        displayPhotos(photos);
+                        statusLabel.setText("Fotos cargadas correctamente.");
+                    }
+                    setLoading(false);
+                });
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                SwingUtilities.invokeLater(() -> {
+                    showErrorMessage("Error al obtener las fotos: " + ex.getMessage());
+                    setLoading(false);
+                });
             }
-
-            int sol = Integer.parseInt(solText);
-            LocalDate startDate = parseDate(startDateText);
-            LocalDate endDate = parseDate(endDateText);
-
-            List<MarsPhoto> photos = apiController.getPhotos(rover, sol, camera, startDate, endDate);
-            displayPhotos(photos);
-            statusLabel.setText("Fotos cargadas correctamente.");
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            showErrorMessage("Error al obtener las fotos: " + ex.getMessage());
-        }
+        }).start();
     }
 
     private LocalDate parseDate(String dateText) {
         try {
             return LocalDate.parse(dateText);
         } catch (DateTimeParseException e) {
-            showErrorMessage("Formato de fecha inválido. Utilice el formato YYYY-MM-DD.");
+            SwingUtilities.invokeLater(() -> showErrorMessage("Formato de fecha inválido. Utilice el formato YYYY-MM-DD."));
             throw e;
         }
     }
@@ -159,7 +193,6 @@ public class MarsPhotoViewer extends JFrame {
 
             // Adding the link to the image
             JEditorPane linkPane = new JEditorPane("text/html", "<a href='" + photo.getImgSrc() + "'>" + photo.getImgSrc() + "</a>");
-            System.out.println(" ");
             linkPane.setEditable(false);
             linkPane.setOpaque(false);
             linkPane.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -184,7 +217,6 @@ public class MarsPhotoViewer extends JFrame {
         photoPanel.revalidate();
         photoPanel.repaint();
     }
-
 
     private void showErrorMessage(String message) {
         JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
