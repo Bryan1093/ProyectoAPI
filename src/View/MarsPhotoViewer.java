@@ -4,7 +4,6 @@ import Controller.NasaApiController;
 import Model.MarsPhoto;
 import Model.MusicPlayer;
 
-
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
@@ -206,15 +205,12 @@ public class MarsPhotoViewer extends JFrame {
             linkPane.setEditable(false);
             linkPane.setOpaque(false);
             linkPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-            linkPane.addHyperlinkListener(new HyperlinkListener() {
-                @Override
-                public void hyperlinkUpdate(HyperlinkEvent e) {
-                    if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-                        try {
-                            Desktop.getDesktop().browse(e.getURL().toURI());
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
+            linkPane.addHyperlinkListener(e -> {
+                if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+                    try {
+                        Desktop.getDesktop().browse(e.getURL().toURI());
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
                     }
                 }
             });
@@ -234,11 +230,6 @@ public class MarsPhotoViewer extends JFrame {
     }
 
     private void playMusic() {
-        List<String> playlist = Arrays.asList(
-                "C:\\Users\\bryan\\IdeaProjects\\Proyecto_API\\src\\res\\02. The Black.mp3",
-                "C:\\Users\\bryan\\IdeaProjects\\Proyecto_API\\src\\res\\09. Here I Am.mp3"
-        );
-        musicPlayer.setPlaylist(playlist);
         musicPlayer.play();
     }
 
